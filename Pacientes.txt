@@ -1,0 +1,217 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Entidades;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.util.List;
+import utilitarios.Conectar;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author silvi_5cnyxi8
+ */
+public class Paciente {
+    private int id_paciente;
+    private String nome;
+    private String numBi, endereco, telefone;
+    private LocalDate dataNasc;
+
+    public Paciente(String nome, String numBi, LocalDate dataNasc, String endereco, String telefone) {
+        this.nome = nome;
+        this.numBi = numBi;
+        this.dataNasc = dataNasc;
+        this.endereco = endereco;
+        this.telefone = telefone;
+    }
+    
+   
+    public void cadastrar() {
+        PacienteDTO p2 = new PacienteDTO();
+        PacienteDAO p = new PacienteDAO();
+        
+        p.cadastrar(p2);
+        
+        
+        
+        String sql = "INSERT INTO paciente (nome, numDocIdent, dataNasc, endereco, telefone) VALUES (?,?,?,?,?)";
+
+        // Usando try-with-resources para garantir que os recursos serão fechados automaticamente
+        try (Connection con = Conectar.conecta();
+             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            // Define os parâmetros do PreparedStatement com os valores dos atributos da classe Paciente
+            pstmt.setString(1, nome);
+            pstmt.setString(2, numBi);
+            pstmt.setDate(3, java.sql.Date.valueOf(dataNasc));
+            pstmt.setString(4, endereco);
+            pstmt.setString(5, telefone);
+
+            // Executa a inserção
+            int rowsAffected = pstmt.executeUpdate();
+
+            // Se desejar obter o ID gerado pela inserção, você pode fazer o seguinte:
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        // Obtendo o ID gerado para o novo paciente
+                        id_paciente = generatedKeys.getInt(1);
+                    } else {
+                        throw new SQLException("Falha ao obter o ID do paciente inserido.");
+                    }
+                }
+            }
+        JOptionPane.showMessageDialog(null, "Paciente cadastrado com sucesso!");
+
+    } catch (SQLException e) {
+       
+        JOptionPane.showMessageDialog(null, "Erro ao cadastrar paciente.");
+        e.printStackTrace();
+        throw new RuntimeException(e.getMessage());
+    
+    }
+}
+ public void atualizar(){
+    String sql = "UPDATE paciente SET nome = ?, numDocIdent = ?, dataNasc = ?, endereco = ?, telefone = ? WHERE id = ?";
+
+    try (Connection con = Conectar.conecta();
+         PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+        pstmt.setString(1, nome);
+        pstmt.setString(2, numBi);
+        pstmt.setDate(3, java.sql.Date.valueOf(dataNasc));
+        pstmt.setString(4, endereco);
+        pstmt.setString(5, telefone);
+        pstmt.setInt(6, id_paciente);
+
+        pstmt.executeUpdate();
+    JOptionPane.showMessageDialog(null, "Paciente atualizado com sucesso!");
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Erro ao atualizar dados do paciente.");
+        e.printStackTrace();
+    }
+}
+ 
+ 
+public void excluir() throws SQLException, ClassNotFoundException {
+    String sql = "DELETE FROM paciente WHERE id = ?";
+    
+    // Exibe um diálogo de confirmação para o usuário
+    int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o paciente " + nome + "?", "Excluir", JOptionPane.YES_NO_OPTION);
+    
+    // Se o usuário confirmar a exclusão
+    if (opcao == JOptionPane.YES_OPTION) {
+        try (Connection con = Conectar.conecta();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, id_paciente);
+            int rowsAffected = pstmt.executeUpdate();
+
+            // Verifica se algum registro foi excluído
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Paciente excluído com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Nenhum paciente foi excluído.");
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir paciente");
+            e.printStackTrace();
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Exclusão cancelada pelo usuário.");
+    }
+}
+
+
+public List<Paciente> listar(){
+    String sql = "SELECT * FROM paciente ORDER BY nome";
+    List<Paciente> lista = new ArrayList<>();
+
+    try (Connection con = Conectar.conecta();
+         PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+        ResultSet resultado = pstmt.executeQuery();
+
+        while (resultado.next()) {
+            int id_paciente = resultado.getInt("id_paciente");
+            String nome = resultado.getString("nome");
+            String numBi = resultado.getString("numBi");
+            LocalDate dataNasc = resultado.getDate("dataNasc").toLocalDate();
+            String endereco = resultado.getString("endereco");
+            String telefone = resultado.getString("telefone");
+
+            Paciente p = new Paciente(nome, numBi, dataNasc, endereco, telefone);
+            p.setId_paciente(id_paciente);
+            lista.add(p);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar pacientes: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return lista;
+}
+
+
+
+public int getId_paciente() {
+        return id_paciente;
+    }
+
+    public void setId_paciente(int id_paciente) {
+        this.id_paciente = id_paciente;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNumBi() {
+        return numBi;
+    }
+
+    public void setNumBi(String numBi) {
+        this.numBi = numBi;
+    }
+
+    public LocalDate getDataNasc() {
+        return dataNasc;
+    }
+
+    public void setDataNasc(LocalDate dataNasc) {
+        this.dataNasc = dataNasc;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+    
+}
