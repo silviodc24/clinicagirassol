@@ -151,6 +151,34 @@ public class PacienteDAO {
     } 
     
     
+    public PacienteDTO buscarPorId(int id) {
+    PacienteDTO paciente = null;
+    String sql = "SELECT * FROM paciente WHERE id = ?";
+
+    try (Connection con = Conectar.conecta();
+         PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+        pstmt.setInt(1, id);
+        ResultSet resultado = pstmt.executeQuery();
+
+        if (resultado.next()) {
+            paciente = new PacienteDTO();
+            paciente.setId_paciente(resultado.getInt("id"));
+            paciente.setNome(resultado.getString("nome"));
+            paciente.setNumBi(resultado.getString("numDocIdent"));
+            paciente.setDataNasc(resultado.getDate("dataNasc").toLocalDate());
+            paciente.setEndereco(resultado.getString("endereco"));
+            paciente.setTelefone(resultado.getString("telefone"));
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Erro ao buscar paciente por ID.");
+        e.printStackTrace();
+    }
+
+    return paciente;
+}
+    
     
     
 }

@@ -4,6 +4,7 @@
  */
 package DAO;
 import DTO.*;
+import Telas.*;
 import Entidades.Funcionario;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ import javax.swing.JOptionPane;
 public class FuncionarioDAO {
     
        public void cadastrar(FuncionarioDTO f){
-       String sql = "INSERT INTO funcionario (nome, cargo, salario, dataContratacao) VALUES (?,?,?,?)";
+       String sql = "INSERT INTO funcionario (nome, cargo, salario, dataContratacao, username, senha) VALUES (?,?,?,?,?,MD5(?))";
        
        try(Connection con = Conectar.conecta();
                PreparedStatement pstmt = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
@@ -33,6 +34,8 @@ public class FuncionarioDAO {
            pstmt.setString(2,f.getCargo());
            pstmt.setDouble(3, f.getSalario());
            pstmt.setDate(4, java.sql.Date.valueOf(f.getDataContratacao()));
+           pstmt.setString(5, f.getUsername());
+           pstmt.setString(6, f.getSenha());
            
              // Executa a inserção
                 int rowsAffected = pstmt.executeUpdate();
@@ -60,20 +63,22 @@ public class FuncionarioDAO {
    }
    
    public void atualizar(FuncionarioDTO f){
-       String sql = "UPDATE funcionario SET nome = ?, cargo = ?, salario = ?, dataContratacao = ?";
+       String sql = "UPDATE funcionario SET nome = ?, cargo = ?, salario = ?, dataContratacao = ?, username = ? WHERE codigo = ?";
        
        try(Connection con = Conectar.conecta();
                PreparedStatement pstmt = con.prepareStatement(sql)){
                pstmt.setString(1,f.getNome());
                pstmt.setString(2, f.getCargo());
                pstmt.setDouble(3, f.getSalario());
-               pstmt.setDate(3, java.sql.Date.valueOf(f.getDataContratacao()));
+               pstmt.setDate(4, java.sql.Date.valueOf(f.getDataContratacao()));
+               pstmt.setString(5, f.getUsername());
+               pstmt.setInt(6, f.getCodigo());
                 
                pstmt.executeUpdate();
                JOptionPane.showMessageDialog(null, "Funcionario atualizado com sucesso!");
                
        }catch(SQLException e){
-             JOptionPane.showMessageDialog(null, "Erro ao atualizar dados do funcionário");
+             JOptionPane.showMessageDialog(null, "Erro ao atualizar dados do funcionário"+e.getMessage());
              e.printStackTrace();
        }
        
@@ -124,7 +129,8 @@ public class FuncionarioDAO {
             f.setNome(resultado.getString("nome"));
             f.setCargo(resultado.getString("cargo"));
             f.setSalario(resultado.getDouble("salario"));
-            f.setDataContratacao(resultado.getDate("dataNasc").toLocalDate());
+            f.setDataContratacao(resultado.getDate("dataContratacao").toLocalDate());
+            f.setUsername(resultado.getString("username"));
             lista.add(f);
         }
 
@@ -135,5 +141,36 @@ public class FuncionarioDAO {
 
     return lista;
  }
+   
+   //Método para efectuar Login
+   
+   public void login(String username, String senha){
+       String sql = "SELECT * FROM funcionario WHERE username = ? and senha = MD5(?)";
+       try (Connection con = Conectar.conecta();
+         PreparedStatement pstmt = con.prepareStatement(sql)){
+           
+           pstmt.setString(1, username);
+           pstmt.setString(2, senha);
+           
+          ResultSet rs = pstmt.executeQuery();
+          
+          if(rs.next()){
+              JOptionPane.showMessageDialog(null, "Bem vindo ao SG Clínica GIrassol");
+              new MenuPage().setVisible(true);
+          
+          }else{
+              JOptionPane.showMessageDialog(null, "Email ou senha incorretos. Tente novamente");
+          }
+       }catch(SQLException erro){
+       
+       JOptionPane.showMessageDialog(null, "Erro: "+erro.getMessage());
+       }
+   
+   
+   }
+   
+   
+   
+   
    
 }
