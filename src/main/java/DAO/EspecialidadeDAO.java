@@ -23,13 +23,14 @@ import javax.swing.JOptionPane;
 public class EspecialidadeDAO {
     
     public void cadastrar(Especialidade esp){
-        String sql = "INSERT INTO especialidade (nome, descricao) VALUES (?,?)";
+        String sql = "INSERT INTO especialidade (nome, descricao, valor) VALUES (?,?,?)";
 
         try (Connection con = Conectar.conecta();
                  PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
 
                 pstmt.setString(1, esp.getNome());
                 pstmt.setString(2, esp.getDescricao());
+                pstmt.setDouble(3, esp.getValor());
 
                 int rowsAffected = pstmt.executeUpdate();
 
@@ -57,14 +58,15 @@ public class EspecialidadeDAO {
     
     public void atualizar(Especialidade esp){
     
-            String sql = "UPDATE especialidade SET nome = ?, descricao = ? WHERE codigo = ?";
+            String sql = "UPDATE especialidade SET nome = ?, descricao = ?, valor = ? WHERE codigo = ?";
             
             try(Connection con = Conectar.conecta();
                     PreparedStatement pstmt = con.prepareStatement(sql)){
             
             pstmt.setString(1, esp.getNome());
             pstmt.setString(2, esp.getDescricao());
-            pstmt.setInt(3, esp.getCodigo());
+            pstmt.setDouble(3, esp.getValor());
+            pstmt.setInt(4, esp.getCodigo());
             
             
             pstmt.executeUpdate();
@@ -121,6 +123,7 @@ public class EspecialidadeDAO {
             esp.setCodigo(resultado.getInt("codigo"));
             esp.setNome(resultado.getString("nome"));
             esp.setDescricao(resultado.getString("descricao"));
+            esp.setValor(resultado.getDouble("valor"));
             lista.add(esp);
         }
 

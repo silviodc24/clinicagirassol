@@ -5,6 +5,7 @@ DTO\HorarioDTO.class
 Telas\CadastrarEspecialidade$2.class
 Telas\ListarPacientes$7.class
 Telas\CadastrarPaciente$8.class
+Telas\ListarConsultas$2.class
 Pesquisas\PesquisaPaciente$2.class
 Telas\CadastroFuncionario$12.class
 Telas\AgendarConsulta$7.class
@@ -28,15 +29,18 @@ Telas\ListarFuncionario$10.class
 Telas\ListarFuncionario$5.class
 Telas\CadastroFuncionario$3.class
 Telas\CadastroFuncionario$14.class
+Telas\ListarConsultas$4.class
 Telas\AgendarConsulta$5.class
 Telas\LoginPage$3.class
 Telas\CadastrarEspecialidade$3.class
 Telas\CadastrarPaciente$3.class
 Telas\MenuPage$4.class
 Telas\CadastroFuncionario$15.class
+Telas\ListarConsultas$5.class
 Telas\MenuPage$5.class
 Telas\AgendarConsulta$6.class
 Telas\LoginPage$2.class
+Telas\ListarConsultas.class
 Telas\CadastrarPaciente$4.class
 Pesquisas\PesquisaPaciente$1.class
 Telas\ListarPacientes$5.class
@@ -58,12 +62,14 @@ Telas\CadastroFuncionario$5.class
 Telas\CadastrarEspecialidade$6.class
 Telas\ListarFuncionario$4.class
 Telas\CadastroFuncionario$10.class
+Telas\ListarConsultas$3.class
 Telas\CadastroFuncionario.class
 Telas\ListarPacientes$6.class
 Telas\CadastrarPaciente$9.class
 Telas\ListarPacientes.class
 DAO\PacienteDAO.class
 Pesquisas\PesquisaPaciente$3.class
+Telas\AgendarConsulta$10.class
 Telas\CadastroFuncionario$13.class
 DAO\ConsultaDAO.class
 Telas\ListarFuncionario$7.class
@@ -72,6 +78,7 @@ Pesquisas\PesquisaPaciente$4.class
 DAO\MedicoDAO.class
 Telas\CadastroFuncionario$7.class
 Telas\CadastrarPaciente$6.class
+Telas\AgendarConsulta$8.class
 Telas\MenuPage$1.class
 DTO\ConsultaDTO.class
 Telas\ListarPacientes$10.class
@@ -81,6 +88,7 @@ Telas\ListarFuncionario$8.class
 Telas\ListarPacientes$1.class
 Telas\AgendarConsulta$2.class
 Telas\ListarPacientes$9.class
+Telas\AgendarConsulta$9.class
 Telas\CadastrarPaciente.class
 DAO\EspecialidadeDAO.class
 Telas\CadastrarEspecialidade$1.class
@@ -92,6 +100,7 @@ Telas\ListarFuncionario$9.class
 DTO\PacienteDTO.class
 Telas\CadastrarPaciente$10.class
 Telas\ListarFuncionario$2.class
+Telas\ListarConsultas$1.class
 Telas\ListarFuncionario.class
 utilitarios\Conectar.class
 Telas\ListarPacientes$8.class

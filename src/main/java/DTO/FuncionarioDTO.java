@@ -79,4 +79,9 @@ public class FuncionarioDTO {
         this.senha = senha;
     }
    
+    
+    @Override
+    public String toString() {
+        return this.getNome();
+    }
 }

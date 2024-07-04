@@ -87,9 +87,9 @@ public class MedicoDAO {
     
  
     
-    public List<MedicoDTO> listar() {
+    public List<MedicoDTO> listarMedicos() {
     List<MedicoDTO> lista = new ArrayList<>();
-    String sql = "SELECT funcionario.nome, funcionario.cargo, funcionario.salario, funcionario.dataContratacao, funcionario.username, medico.especialidade FROM funcionario JOIN medico ON medico.codigoFuncionario = funcionario.codigo";
+    String sql = "SELECT funcionario.nome, funcionario.cargo, funcionario.salario, funcionario.dataContratacao, funcionario.username, medico.especialidadeId, medico.idMedico FROM funcionario JOIN medico ON medico.codigoFuncionario = funcionario.codigo";
     
     try (Connection con = Conectar.conecta();
          PreparedStatement pstmt = con.prepareStatement(sql);
@@ -102,7 +102,8 @@ public class MedicoDAO {
             medico.setSalario(rs.getDouble("salario"));
             medico.setDataContratacao(rs.getDate("dataContratacao").toLocalDate());
             medico.setUsername(rs.getString("username"));
-            medico.setEspecialidade(rs.getInt("especialidade"));
+            medico.setEspecialidade(rs.getInt("especialidadeId"));
+            medico.setIdMedico(rs.getInt("idMedico"));
             lista.add(medico);
         }
     } catch (SQLException erro) {
@@ -111,15 +112,16 @@ public class MedicoDAO {
     }
     
     return lista;
-    }
+}
+
  
     
    public List<MedicoDTO> listarNome(int especialidadeId) {
         List<MedicoDTO> lista = new ArrayList<>();
-        String sql = "SELECT funcionario.nome " +
-                     "FROM funcionario " +
-                     "JOIN medico ON medico.codigoFuncionario = funcionario.codigo " +
-                     "WHERE medico.especialidadeId = ?";
+        String sql = "SELECT f.nome, m.idMedico " +
+                 "FROM funcionario f " +
+                 "JOIN medico m ON m.codigoFuncionario = f.codigo " +
+                 "WHERE m.especialidadeId = ?";
 
         try (Connection con = Conectar.conecta();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -130,7 +132,34 @@ public class MedicoDAO {
                 while (rs.next()) {
                     MedicoDTO medico = new MedicoDTO();
                     medico.setNome(rs.getString("nome"));
+                    medico.setIdMedico(rs.getInt("idMedico"));
                     lista.add(medico);
+                }
+            }
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar nomes: " + erro.getMessage());
+            erro.printStackTrace();
+        }
+
+        return lista;
+    }
+   
+   
+   public List<String> listarNomesPorEspecialidade(int especialidadeId) {
+        List<String> lista = new ArrayList<>();
+        String sql = "SELECT f.nome " +
+                     "FROM funcionario f " +
+                     "JOIN medico m ON m.codigoFuncionario = f.codigo " +
+                     "WHERE m.especialidadeId = ?";
+
+        try (Connection con = Conectar.conecta();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setInt(1, especialidadeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(rs.getString("nome"));
                 }
             }
         } catch (SQLException erro) {

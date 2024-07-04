@@ -37,4 +37,9 @@ public class MedicoDTO extends FuncionarioDTO {
     public void setEspecialidade(int especialidade) {
         this.especialidade = especialidade;
     }
+    
+  @Override
+    public String toString() {
+        return this.getNome();
+    }
 }

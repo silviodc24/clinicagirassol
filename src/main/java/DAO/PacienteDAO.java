@@ -43,7 +43,7 @@ public class PacienteDAO {
             // Executa a inserção
             int rowsAffected = pstmt.executeUpdate();
 
-            // Se desejar obter o ID gerado pela inserção, você pode fazer o seguinte:
+            
             if (rowsAffected > 0) {
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
