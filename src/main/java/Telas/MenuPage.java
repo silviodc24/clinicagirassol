@@ -88,6 +88,11 @@ public class MenuPage extends javax.swing.JFrame {
         });
 
         jButton4.setText("Consultas");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Selecione uma opção:");
 
@@ -160,6 +165,11 @@ public class MenuPage extends javax.swing.JFrame {
         new CadastrarEspecialidade().setVisible(true); 
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        new AgendarConsulta().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

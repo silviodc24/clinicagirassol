@@ -3,7 +3,6 @@ package Telas;
 import DAO.PacienteDAO;
 import DTO.PacienteDTO;
 import utilitarios.Conectar;
-import Entidades.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;

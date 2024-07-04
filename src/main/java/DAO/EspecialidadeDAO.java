@@ -132,4 +132,33 @@ public class EspecialidadeDAO {
     return lista;
     }
     
+    
+    public List<String> listarEsp(){
+    String sql = "SELECT * FROM especialidade";
+        List<String> lista = new ArrayList<>();
+
+    try (Connection con = Conectar.conecta();
+         PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+        ResultSet resultado = pstmt.executeQuery();
+
+        while (resultado.next()) {
+            String espc;
+          
+            espc = resultado.getString("nome");
+            
+            lista.add(espc);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar pacientes: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return lista;
+    
+    
+    
+    
+    }
 }

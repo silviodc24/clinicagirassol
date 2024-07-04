@@ -330,7 +330,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                                     .addComponent(jComboBoxEspecialidade, 0, 251, Short.MAX_VALUE))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -445,11 +445,17 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(2, 2, 2))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(2, 2, 2))
         );
 
         pack();
@@ -500,7 +506,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     private void jComboBoxEspecialidadeAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jComboBoxEspecialidadeAncestorAdded
         EspecialidadeDAO esp = new EspecialidadeDAO();
 
-        List<Especialidade>listaEspecialidade = esp.listarEspecialidade();
+        List<Especialidade> listaEspecialidade = esp.listarEspecialidade();
 
         // remove todos os itens do combo box.
         jComboBoxEspecialidade.removeAllItems();
@@ -535,7 +541,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             // Verificar se foi selecionada alguma especialidade
             if (especialidadeSelecionada != null) {
                 // Definir o código da especialidade no médico
-                medico.setEspecialidade(especialidadeSelecionada.getCodigo()); // Supondo que o método correto seja utilizado
+                medico.setEspecialidade(especialidadeSelecionada.getCodigo()); 
             } else {
                 JOptionPane.showMessageDialog(null, "Selecione uma especialidade.");
                 return;
@@ -603,6 +609,42 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboCargoActionPerformed
 
     private void BotaoAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoAtualizarActionPerformed
+        String cargoSelecionado = (String) jComboCargo.getSelectedItem();
+        
+        if("Médico".equals(cargoSelecionado)){
+            medico.setCodigo(this.codigo);
+            medico.setNome(jTextNome.getText());
+            medico.setCargo(cargoSelecionado);
+            medico.setNumeroMed(Integer.parseInt(jTextNumeroMedico.getText()));
+            medico.setSalario(Double.parseDouble(jTextSalario.getText()));
+
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate dataContract = LocalDate.parse(jFDataContratacao.getText(), formatter);
+                medico.setDataContratacao(dataContract);
+            } catch (DateTimeParseException e) {
+                JOptionPane.showMessageDialog(null, "Data de contratação inválida. Por favor, insira no formato dd/MM/yyyy.");
+                return;
+            }
+
+            // Obter a especialidade selecionada na JComboBox
+            Especialidade especialidadeSelecionada = (Especialidade) jComboBoxEspecialidade.getSelectedItem();
+
+            // Verificar se foi selecionada alguma especialidade
+            if (especialidadeSelecionada != null) {
+                // Definir o código da especialidade no médico
+                medico.setEspecialidade(especialidadeSelecionada.getCodigo()); 
+            } else {
+                JOptionPane.showMessageDialog(null, "Selecione uma especialidade.");
+                return;
+            }
+            medico.setUsername(jTextUsername.getText());
+           // medico.setSenha(jTextSenha.getText());
+            mDAO.atualizar(medico);
+        
+       
+        }else{
+        
         f.setCodigo(this.codigo);
         f.setNome(jTextNome.getText());
         f.setCargo(jComboCargo.getSelectedItem().toString());
@@ -625,7 +667,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         }
         f.setUsername(jTextUsername.getText());
         fDAO.atualizar(f);
-        
+        }
     }//GEN-LAST:event_BotaoAtualizarActionPerformed
 
     private void BotaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCancelarActionPerformed

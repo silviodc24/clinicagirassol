@@ -155,16 +155,15 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextUsernameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     String username, senha;
+     /*String username, senha;
      
      username = jTextUsername.getText();
      senha = jPassword.getText();
      
      FuncionarioDAO f = new FuncionarioDAO();
-     f.login(username, senha);
+     f.login(username, senha);*/
 
-
-//new MenuPage().setVisible(true);
+    new MenuPage().setVisible(true);
     dispose();// TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 

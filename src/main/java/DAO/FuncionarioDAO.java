@@ -5,7 +5,6 @@
 package DAO;
 import DTO.*;
 import Telas.*;
-import Entidades.Funcionario;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
@@ -124,7 +123,7 @@ public class FuncionarioDAO {
 
         while (resultado.next()) {
             FuncionarioDTO f = new FuncionarioDTO();
-           
+          
             f.setCodigo(resultado.getInt("codigo"));
             f.setNome(resultado.getString("nome"));
             f.setCargo(resultado.getString("cargo"));

@@ -5,7 +5,6 @@
 package DAO;
 
 import DTO.*;
-import Entidades.Funcionario;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
@@ -86,5 +85,66 @@ public class MedicoDAO {
         }
     }
     
+ 
     
-}
+    public List<MedicoDTO> listar() {
+    List<MedicoDTO> lista = new ArrayList<>();
+    String sql = "SELECT funcionario.nome, funcionario.cargo, funcionario.salario, funcionario.dataContratacao, funcionario.username, medico.especialidade FROM funcionario JOIN medico ON medico.codigoFuncionario = funcionario.codigo";
+    
+    try (Connection con = Conectar.conecta();
+         PreparedStatement pstmt = con.prepareStatement(sql);
+         ResultSet rs = pstmt.executeQuery()) {
+
+        while (rs.next()) {
+            MedicoDTO medico = new MedicoDTO();
+            medico.setNome(rs.getString("nome"));
+            medico.setCargo(rs.getString("cargo"));
+            medico.setSalario(rs.getDouble("salario"));
+            medico.setDataContratacao(rs.getDate("dataContratacao").toLocalDate());
+            medico.setUsername(rs.getString("username"));
+            medico.setEspecialidade(rs.getInt("especialidade"));
+            lista.add(medico);
+        }
+    } catch (SQLException erro) {
+        JOptionPane.showMessageDialog(null, "Erro ao listar médicos: " + erro.getMessage());
+        erro.printStackTrace();
+    }
+    
+    return lista;
+    }
+ 
+    
+   public List<MedicoDTO> listarNome(int especialidadeId) {
+        List<MedicoDTO> lista = new ArrayList<>();
+        String sql = "SELECT funcionario.nome " +
+                     "FROM funcionario " +
+                     "JOIN medico ON medico.codigoFuncionario = funcionario.codigo " +
+                     "WHERE medico.especialidadeId = ?";
+
+        try (Connection con = Conectar.conecta();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setInt(1, especialidadeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    MedicoDTO medico = new MedicoDTO();
+                    medico.setNome(rs.getString("nome"));
+                    lista.add(medico);
+                }
+            }
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar nomes: " + erro.getMessage());
+            erro.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    
+    
+    
+    //Fim da classe
+}   
+    
+   
